@@ -1,0 +1,18 @@
+bool isCovered(int** ranges, int rangesSize, int* rangesColSize, int left, int right) {
+    int rng[52]={0}; //array input
+    for(int i=0; i<rangesSize;i++) {
+        int left=ranges[i][0];
+        int right=ranges[i][1];
+        rng[left]+=1;
+        if(right+1 <52)rng[right+1]-=1;
+    }
+    for(int i=1;i<52;i++)
+    {
+        rng[i]+=rng[i-1];
+    }
+    for(int i=left;i<=right;i++){
+        if (rng[i]<=0)
+        return false;
+    }
+    return true;
+}
