@@ -1,0 +1,24 @@
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        /* vector<int> stores the pair of indices which give the sum target */
+        vector<int> ans;
+        unordered_map<int, int> mpp; /* declare the hashtable */
+
+        for (int i = 0; i < nums.size(); i++) {
+            // check if (target - nums[i]) exists in map
+            if (mpp.find(target - nums[i]) != mpp.end()) {
+                ans.push_back(mpp[target - nums[i]]);
+                ans.push_back(i);
+                return ans; // return as soon as pair is found
+            }
+            mpp[nums[i]] = i; // store index of current element
+        }
+
+        return ans; // empty if no pair found
+    }
+};
