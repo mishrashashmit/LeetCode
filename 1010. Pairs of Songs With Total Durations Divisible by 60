@@ -1,0 +1,14 @@
+int numPairsDivisibleBy60(int* time, int timeSize) {
+    int freq[60] = {0};   // frequency of remainders
+    long count = 0;
+
+    for (int i = 0; i < timeSize; i++) {
+        int r = time[i] % 60;
+        int complement = (60 - r) % 60;  // handles r = 0 case
+
+        count += freq[complement];  // add pairs with complement
+        freq[r]++;                  // update remainder frequency
+    }
+
+    return (int)count;
+}
