@@ -1,0 +1,65 @@
+#include <stdlib.h>
+
+typedef struct {
+    int key;    // sum
+    int count;  // frequency
+} HashEntry;
+
+#define HASH_SIZE 200003  // large prime for hashing
+
+// Simple hash function
+int hashFunc(int key) {
+    return ((key % HASH_SIZE) + HASH_SIZE) % HASH_SIZE;
+}
+
+// Insert or update key in hashmap
+void insert(HashEntry *hashTable, int key) {
+    int idx = hashFunc(key);
+    while (hashTable[idx].count != 0 && hashTable[idx].key != key) {
+        idx = (idx + 1) % HASH_SIZE;  // linear probing
+    }
+    if (hashTable[idx].count == 0) {
+        hashTable[idx].key = key;
+        hashTable[idx].count = 1;
+    } else {
+        hashTable[idx].count++;
+    }
+}
+
+// Get frequency of key
+int get(HashEntry *hashTable, int key) {
+    int idx = hashFunc(key);
+    while (hashTable[idx].count != 0) {
+        if (hashTable[idx].key == key) return hashTable[idx].count;
+        idx = (idx + 1) % HASH_SIZE;
+    }
+    return 0;
+}
+
+int fourSumCount(int* nums1, int nums1Size, 
+                 int* nums2, int nums2Size, 
+                 int* nums3, int nums3Size, 
+                 int* nums4, int nums4Size) {
+    
+    HashEntry *hashTable = calloc(HASH_SIZE, sizeof(HashEntry));
+    if (!hashTable) return 0;
+
+    //store sums of nums1 + nums2
+    for (int i = 0; i < nums1Size; i++) {
+        for (int j = 0; j < nums2Size; j++) {
+            insert(hashTable, nums1[i] + nums2[j]);
+        }
+    }
+
+    //check sums of nums3 + nums4 against hashmap
+    long count = 0;
+    for (int i = 0; i < nums3Size; i++) {
+        for (int j = 0; j < nums4Size; j++) {
+            int sum = nums3[i] + nums4[j];
+            count += get(hashTable, -sum);
+        }
+    }
+
+    free(hashTable);
+    return (int)count;
+}
