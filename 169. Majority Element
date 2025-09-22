@@ -1,0 +1,20 @@
+#include <iostream>
+#include <vector>
+#include <map>
+using namespace std;
+
+class Solution {
+public:
+    int majorityElement(vector<int>& nums) {
+        map<int, int> freq; //create map 'freq'- map-{key,value}-here: { the number, no. of times it occurs}
+        int n = nums.size();
+
+        for (int i:nums) { // i is the number for whose occurence we have to find // this is a loop to       traverse through each element in the array nums
+            freq[i]++; //increments the count of element(i) in the map
+            if (freq[i] > n / 2) { //checks the required condition
+                return i;
+            }
+        }
+        return -1;
+    }
+};
