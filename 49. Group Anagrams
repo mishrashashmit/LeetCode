@@ -1,0 +1,16 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> mp; //vector for changing size, this line for vector containing group of anagrams
+        for (const string& s : strs) {
+            string key = s;
+            sort(key.begin(), key.end());
+            mp[key].push_back(s);
+        }
+        vector<vector<string>> result;
+        for (auto& pair : mp) { //auto is for taking value to put in result
+            result.push_back(pair.second); //add the values from the back in result
+        }
+        return result;
+    }
+};
