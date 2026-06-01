@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int minimumCost(vector<int>& cost) {
+        sort(cost.begin(),cost.end(),greater<int>());
+        int total=0;
+        for(int candy=0;candy<cost.size();candy++){
+            if(candy % 3==2){
+                continue;
+            }
+            else {
+               total=total+cost[candy];
+            }
+        }
+        return total;
+    }
+};
