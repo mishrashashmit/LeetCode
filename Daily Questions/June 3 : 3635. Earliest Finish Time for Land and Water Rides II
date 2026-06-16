@@ -1,0 +1,83 @@
+class Solution {
+public:
+    long long solveDirection(const vector<int>& startA,
+                             const vector<int>& durationA,
+                             const vector<int>& startB,
+                             const vector<int>& durationB) {
+        int m = startB.size();
+
+        vector<pair<int, int>> ridesB;
+        ridesB.reserve(m);
+
+        for (int i = 0; i < m; i++) {
+            ridesB.push_back({startB[i], durationB[i]});
+        }
+
+        sort(ridesB.begin(), ridesB.end());
+
+        vector<int> starts(m);
+        vector<long long> prefMinDur(m), suffMinFinish(m);
+
+        for (int i = 0; i < m; i++) {
+            starts[i] = ridesB[i].first;
+
+            if (i == 0)
+                prefMinDur[i] = ridesB[i].second;
+            else
+                prefMinDur[i] = min(prefMinDur[i - 1],
+                                    (long long)ridesB[i].second);
+        }
+
+        for (int i = m - 1; i >= 0; i--) {
+            long long val =
+                (long long)ridesB[i].first + ridesB[i].second;
+
+            if (i == m - 1)
+                suffMinFinish[i] = val;
+            else
+                suffMinFinish[i] = min(suffMinFinish[i + 1], val);
+        }
+
+        long long ans = LLONG_MAX;
+
+        for (int i = 0; i < (int)startA.size(); i++) {
+            long long finishA = (long long)startA[i] + durationA[i];
+
+            int idx = upper_bound(starts.begin(), starts.end(), finishA)
+                      - starts.begin();
+
+            long long best = LLONG_MAX;
+
+            // Rides already open when A finishes
+            if (idx > 0) {
+                best = min(best,
+                           finishA + prefMinDur[idx - 1]);
+            }
+
+            // Rides opening later
+            if (idx < m) {
+                best = min(best, suffMinFinish[idx]);
+            }
+
+            ans = min(ans, best);
+        }
+
+        return ans;
+    }
+
+    int earliestFinishTime(vector<int>& landStartTime,
+                           vector<int>& landDuration,
+                           vector<int>& waterStartTime,
+                           vector<int>& waterDuration) {
+
+        long long landThenWater =
+            solveDirection(landStartTime, landDuration,
+                           waterStartTime, waterDuration);
+
+        long long waterThenLand =
+            solveDirection(waterStartTime, waterDuration,
+                           landStartTime, landDuration);
+
+        return (int)min(landThenWater, waterThenLand);
+    }
+};
