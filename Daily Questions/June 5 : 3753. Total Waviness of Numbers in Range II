@@ -1,0 +1,133 @@
+class Solution {
+public:
+
+    struct Node {
+        long long cnt;
+        long long wave;
+    };
+
+    string digits;
+
+    Node dp[20][11][11];
+    bool vis[20][11][11];
+
+    Node dfs(int pos,
+             bool tight,
+             bool started,
+             int prev2,
+             int prev1)
+    {
+        if(pos == digits.size())
+            return {1, 0};
+
+        if(!tight && started &&
+           vis[pos][prev2 + 1][prev1 + 1])
+        {
+            return dp[pos][prev2 + 1][prev1 + 1];
+        }
+
+        int limit = tight
+                    ? digits[pos] - '0'
+                    : 9;
+
+        Node ans = {0, 0};
+
+        for(int d = 0; d <= limit; d++)
+        {
+            bool ntight =
+                tight && (d == limit);
+
+            bool nstarted =
+                started || (d != 0);
+
+            int nprev2 = prev2;
+            int nprev1 = prev1;
+
+            int extra = 0;
+
+            if(!nstarted)
+            {
+                auto child =
+                    dfs(pos + 1,
+                        ntight,
+                        false,
+                        -1,
+                        -1);
+
+                ans.cnt += child.cnt;
+                ans.wave += child.wave;
+
+                continue;
+            }
+
+            if(!started)
+            {
+                nprev1 = d;
+            }
+            else if(prev2 == -1)
+            {
+                nprev2 = prev1;
+                nprev1 = d;
+            }
+            else
+            {
+                if((prev1 > prev2 &&
+                    prev1 > d) ||
+                   (prev1 < prev2 &&
+                    prev1 < d))
+                {
+                    extra = 1;
+                }
+
+                nprev2 = prev1;
+                nprev1 = d;
+            }
+
+            auto child =
+                dfs(pos + 1,
+                    ntight,
+                    nstarted,
+                    nprev2,
+                    nprev1);
+
+            ans.cnt += child.cnt;
+            ans.wave +=
+                child.wave +
+                child.cnt * extra;
+        }
+
+        if(!tight && started)
+        {
+            vis[pos][prev2 + 1][prev1 + 1]
+                = true;
+
+            dp[pos][prev2 + 1][prev1 + 1]
+                = ans;
+        }
+
+        return ans;
+    }
+
+    long long solve(long long x)
+    {
+        if(x < 0)
+            return 0;
+
+        digits = to_string(x);
+
+        memset(vis, 0, sizeof(vis));
+
+        return dfs(0,
+                   true,
+                   false,
+                   -1,
+                   -1).wave;
+    }
+
+    long long totalWaviness(long long num1,
+                            long long num2)
+    {
+        return solve(num2)
+             - solve(num1 - 1);
+    }
+};
