@@ -1,0 +1,51 @@
+class Solution {
+public:
+    vector<int> pivotArray(vector<int>& nums, int pivot) {
+
+        // Stores all elements smaller than pivot
+        vector<int> smaller;
+
+        // Stores all elements greater than pivot
+        vector<int> greater;
+
+        // Counts how many times pivot appears
+        int equalCount = 0;
+
+        // Traverse the original array once
+        for (int num : nums) {
+
+            // If current element is smaller than pivot,
+            // store it in the 'smaller' vector
+            if (num < pivot)
+                smaller.push_back(num);
+
+            // If current element is greater than pivot,
+            // store it in the 'greater' vector
+            else if (num > pivot)
+                greater.push_back(num);
+
+            // Otherwise it is equal to pivot
+            // so increase the count
+            else
+                equalCount++;
+        }
+
+        // Final answer vector
+        vector<int> ans;
+
+        // First add all elements smaller than pivot
+        for (int num : smaller)
+            ans.push_back(num);
+
+        // Then add pivot 'equalCount' times
+        while (equalCount--)
+            ans.push_back(pivot);
+
+        // Finally add all elements greater than pivot
+        for (int num : greater)
+            ans.push_back(num);
+
+        // Return the partitioned array
+        return ans;
+    }
+};
