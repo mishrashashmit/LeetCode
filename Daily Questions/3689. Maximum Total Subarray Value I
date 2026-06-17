@@ -1,0 +1,11 @@
+class Solution {
+public:
+    long long maxTotalValue(vector<int>& nums, int k) {
+        // Minimum element
+        int mn = *min_element(nums.begin(), nums.end());
+        // Maximum element
+        int mx = *max_element(nums.begin(), nums.end());
+        // k × (max - min)
+        return 1LL * k * (mx - mn);
+    }
+};
