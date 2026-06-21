@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int maxIceCream(vector<int>& costs, int coins) {
+
+        int mx = *max_element(costs.begin(), costs.end());
+
+        // Store frequency of each cost
+        vector<int> freq(mx + 1, 0);
+
+        for (int c : costs)
+            freq[c]++;
+
+        int ans = 0;
+
+        // Buy cheapest bars first
+        for (int cost = 1; cost <= mx; cost++) {
+
+            int buy = min(freq[cost], coins / cost);
+            /*(coins/cost) : gives the maximum number of ice
+            creams you can afford at this price.*/
+
+            ans += buy; /*because buy is how many ice cream
+            bars we purchased at the current cost, and ans stores the total bars purchased so far.*/
+            coins -= buy * cost;        // Deduct spent coins
+        }
+
+        return ans;
+    }
+};
