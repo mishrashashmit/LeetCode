@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        unordered_map<int, int> pfsumVal; //for storing prefixsum and value 
+        pfsumVal[0]=1; //map of 0 is initially 1 as still not at the o index of nums
+        int prefixSum=0; //initially prefix sum = 0 ; ie mp[0]=1
+        int nOfSubarr=0; //initially 0 subarrays whose sum == k
+        
+        for(int i=0; i < nums.size(); i++){
+            prefixSum+=nums[i];
+            int remove = prefixSum-k; //initial prefix sums that can be removed
+            nOfSubarr+=pfsumVal[remove]; //initial prefix sums that can be removed are the number of subarrays required
+            pfsumVal[prefixSum]+=1;
+        }
+        return nOfSubarr;
+    }
+};
+
+//Current Prefix − Previous Prefix = Target ⇒ Search currSum - k in the HashMap.
