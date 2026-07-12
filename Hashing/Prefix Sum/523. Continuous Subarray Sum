@@ -1,0 +1,26 @@
+class Solution {
+public:
+    bool checkSubarraySum(vector<int>& nums, int k) {
+        unordered_map<int, int> mp; // key(remainder), value(first occurence of remainder)
+        int currSum=0;
+        int rem;
+        mp[0]=-1; //before array starts prf=0
+
+        for(int i =0 ; i < nums.size(); i++){
+            currSum+=nums[i]; //compute prefix sum
+            rem=currSum%k; // why calc ? as if two prefix sums have the same remainder, the subarray between them has a sum divisible by k
+
+            if(mp.find(rem)!=mp.end()){
+                if(i-mp[rem]>=2){ //checking length
+                    return true;
+                }
+            }
+                else{
+                    mp[rem]=i; //storing first occurence
+                }
+            }
+        return false;
+        }
+};
+
+//If two prefix sums have the same remainder when divided by k, then the sum of the elements between them is divisible by k.
