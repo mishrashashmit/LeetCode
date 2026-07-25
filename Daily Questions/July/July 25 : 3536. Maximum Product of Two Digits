@@ -1,0 +1,10 @@
+class Solution {
+public:
+    int maxProduct(int n) {
+        string s=to_string(n); //store digit in string
+        sort(s.begin(), s.end()); //sort the string
+        char last=s.back()-'0'; //take the last digit
+        char secondLast=s[s.size()-2]-'0'; //take second largest
+        return last*secondLast; //multiply both
+    }
+};
