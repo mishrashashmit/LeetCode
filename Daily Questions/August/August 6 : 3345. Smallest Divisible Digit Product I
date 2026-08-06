@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int smallestNumber(int n, int t) {
+        while(true){
+            int product=1; 
+            int copy=n;
+
+            while(copy>0){ //15 , 1
+            int digit=copy%10; //5 , 1
+            product*=digit; //5 , 5
+            copy/=10; //1 ; 0 -> stop execution
+
+            if(product%t==0){ //5%3 !=0
+                return n;
+                }
+                //here copy is still zero
+            }
+        n++; //16 goes again to while
+        }
+        return n;
+    }
+};
