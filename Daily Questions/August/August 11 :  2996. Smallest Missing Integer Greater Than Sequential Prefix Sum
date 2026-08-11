@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int missingInteger(vector<int>& nums) {
+        int sum=nums[0];
+        //calculate prefixsum
+        for(int i=1 ; i<nums.size();i++){
+            if(nums[i]==nums[i-1]+1){
+                sum+=nums[i];
+            }
+            else{
+                break; //stop when sequence breaks
+            }
+        }
+        unordered_set<int> ans(nums.begin(), nums.end());
+        int result = sum;
+        while (ans.count(result)) {
+            result++;
+        }
+        return result;
+    }
+};
