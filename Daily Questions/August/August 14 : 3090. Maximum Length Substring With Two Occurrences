@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int maximumLengthSubstring(string s) {
+        int ans=0;
+        for(int i=0; i<s.size();i++){
+            for(int j=i; j<s.size();j++){
+                string subs=s.substr(i, j-i+1); //substr(begin, length)
+
+                vector<int>freq(26,0);
+                for(char c : subs){
+                    freq[c-'a']++;
+                }
+                bool isValid= true;
+
+                for(int count:freq){
+                    if (count > 2){
+                        isValid=false;
+                    break;
+                    }
+
+                }
+                    if(isValid==true){
+                    ans=max(ans, (int)subs.length());
+                    }
+            }
+        }
+            return ans;
+    }
+};
